@@ -1,0 +1,25 @@
+
+/* Contenedor con scroll sólo si es necesario */
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  /* opcional: esconder scrollbar cuando no haga falta */
+  -ms-overflow-style: none;  /* IE 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
+.tableWrapper::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari */
+}
+
+/* Asegura que el Table interno se mida según su contenido */
+.responsiveTable {
+  display: inline-table;  /* ó inline-block */
+  /* width y min-width los controlamos por style inline */
+}
+
+/* Truncado del texto */
+.cellContent {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
