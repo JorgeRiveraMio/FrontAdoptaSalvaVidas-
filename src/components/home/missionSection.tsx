@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import ImgDog from "@/assets/image/home/img_dog.jpg";
 import DogTest from "@/assets/image/home/adopta_home.jpg";
+import DonationLink from "@/components/home/DonationLink";
 // import Responsable from "@/assets/image/home/responsable.png";
 // import Cuidado from "@/assets/image/home/cuidado.png";
 // import Equipo from "@/assets/image/home/equipo.png";
@@ -41,26 +42,18 @@ export default function MissionSection() {
             <Donation></Donation>
             {/* Botón de voluntariado */}
             <div className="mt-6 text-left">
-            <div className="flex flex-wrap gap-4 mt-6">
-              {/* Botón Voluntariado */}
+            <div className="flex gap-4 mt-6">
+              {/* Voluntariado */}
               <Link
                 to="/voluntariado"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-red-700 text-white font-semibold shadow-md hover:bg-red-800 transition duration-300"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-red-700 text-white font-semibold shadow-md hover:bg-red-800 transition duration-300 min-w-[180px]"
               >
                 Voluntariado
                 <i className="ml-2 fa-solid fa-arrow-right"></i>
               </Link>
-              {/* Botón Donaciones */}
-              <Link
-                to="/donaciones"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-yellow-400 text-gray-900 font-semibold shadow-md hover:bg-yellow-500 transition duration-300"
-              >
-                Donaciones
-                <i className="ml-2 fa-solid fa-heart"></i>
-              </Link>
 
+              {/* Donaciones */}
+              <DonationLink />
             </div>
           </div>
         </div>

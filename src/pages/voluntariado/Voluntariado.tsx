@@ -4,7 +4,7 @@ import Team from '@/assets/image/home/solidary.jpg'
 import Op from '@/assets/image/home/voluntariado.jpg'
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-
+import DonationLink from "@/components/home/DonationLink";
 import team_one from "@/assets/image/home/team_one.jpg";
 import team_two from "@/assets/image/home/team_two.jpg";
 import team_tree from "@/assets/image/home/team_tree.jpg";
@@ -15,6 +15,7 @@ import UCV_logo from "@/assets/image/home/UCV_logo.png";
 import UNMSM from "@/assets/image/home/UNMSM.png";
 import Ulima_tree from "@/assets/image/home/Ulima_tree.png";
 import UTP from "@/assets/image/home/UTP.png";
+
 
 const galleryImages = [
     team_one,
@@ -120,17 +121,9 @@ export default function Voluntariado(){
                             Contacto
                             <i className="ml-2 fa-solid fa-arrow-right"></i>
                         </Link>
-                        {/* Botón Donaciones */}
-                        <a
-                            href="https://wa.me/51955288116"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-yellow-400 text-gray-900 font-semibold shadow-md hover:bg-yellow-500 transition duration-300"
-                        >
-                            Donaciones
-                            <i className="ml-2 fa-solid fa-heart"></i>
-                        </a>
 
+                        {/* Botón Donaciones reutilizado con modal */}
+                        <DonationLink />
                         </div>
                     </div>
                     </div>
