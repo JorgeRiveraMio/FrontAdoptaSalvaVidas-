@@ -8,35 +8,40 @@ interface Props {
 
 const notificationDropdown: React.FC<Props> = ({ usuarioId }) => {
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
+  
   const [mostrar, setMostrar] = useState(false);
 
-  useEffect(() => {
-    const cargar = async () => {
-      const notis = await fetchNotificacionesByUsuario(usuarioId);
-      setNotificaciones(notis);
-    };
-    cargar();
-  }, [usuarioId]);
-
-  const marcarLeida = async (id: number) => {
-    const ok = await marcarNotificacionComoLeida(id);
-    if (ok) {
-      setNotificaciones(prev =>
-        prev.map(n => (n.id === id ? { ...n, leida: true } : n))
-      );
-    }
+useEffect(() => {
+  const cargar = async () => {
+    const notis = await fetchNotificacionesByUsuario(usuarioId);
+    console.log("Respuesta original del backend:", notis);
+    setNotificaciones(notis); // ✅ sin map ni transformación
   };
 
-  const noLeidas = notificaciones.filter(n => !n.leida).length;
+  cargar();
+}, [usuarioId]);
+
+
+ const marcarLeida = async (id: number) => {
+  const ok = await marcarNotificacionComoLeida(id);
+  if (ok) {
+    setNotificaciones(prev =>
+      prev.map(n => (n.id === id ? { ...n, leida: 1 } : n)) // ✅ aquí
+    );
+  }
+};
+
+  const noLeidas = notificaciones.filter(n => !n.leido).length;
 
   return (
     <div className="relative">
       <button onClick={() => setMostrar(!mostrar)} className="relative">
         🔔
         {noLeidas > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
-            {noLeidas}
-          </span>
+        <span className="bg-red-500 text-white rounded-full px-2 text-xs">
+        {noLeidas > 0 ? noLeidas : ""}
+        </span>
+
         )}
       </button>
 
@@ -48,16 +53,21 @@ const notificationDropdown: React.FC<Props> = ({ usuarioId }) => {
               <li className="p-2 text-sm text-gray-500">No hay notificaciones.</li>
             )}
             {notificaciones.map(n => (
-              <li
-                key={n.id}
-                onClick={() => !n.leida && marcarLeida(n.id)}
-                className={`p-2 text-sm cursor-pointer hover:bg-gray-100 ${
-                  n.leida ? "text-gray-500" : "font-semibold"
-                }`}
-              >
-                {n.mensaje}
-                <div className="text-xs text-gray-400">{new Date(n.fechaCreacion).toLocaleString()}</div>
-              </li>
+        <li
+        key={n.id}
+        onClick={() => !n.leido && marcarLeida(n.id)}
+        className={`p-2 text-sm cursor-pointer hover:bg-gray-100 rounded ${
+            n.leido
+            ? "text-gray-500 bg-white"
+            : "font-semibold text-black bg-yellow-100"
+        }`}
+        >
+        {n.mensaje}
+        <div className="text-xs text-gray-400">
+            {new Date(n.fechaCreacion).toLocaleString()}
+        </div>
+        </li>
+
             ))}
           </ul>
         </div>

@@ -8,11 +8,9 @@ import {
 export interface Notificacion {
   id: number;
   mensaje: string;
-  leida: boolean;
+  leido: boolean;
   fechaCreacion: string;
 }
-
-
 
 // Obtener todas las notificaciones por usuario
 export const fetchNotificacionesByUsuario = async (usuarioId: number): Promise<Notificacion[]> => {
@@ -21,7 +19,7 @@ export const fetchNotificacionesByUsuario = async (usuarioId: number): Promise<N
     return res.map((n: any) => ({
       id: n.id,
       mensaje: n.mensaje,
-      leida: n.leida,
+      leido: n.leido,
       fechaCreacion: n.fechaCreacion,
     }));
   } catch (err) {

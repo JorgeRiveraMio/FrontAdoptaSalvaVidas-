@@ -44,3 +44,4 @@ export interface Adopcion {
   razonesAdopcion: string;
   condicionesAceptadas: boolean;
 }
+

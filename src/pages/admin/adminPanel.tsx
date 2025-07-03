@@ -2,10 +2,11 @@
 import { useState } from "react";
 import Perritos from "./pages/perritos";
 import Adopciones from "./pages/adopciones";
+import User from "./pages/user";
 import Dashboard from "./pages/dasboard";
 import SolicitudesAdopcion from "./pages/solicitudesAdopcion";
 
-type Tab = "dashboard" | "perritos" | "adopciones"| "solicitudesAdopcion";
+type Tab = "dashboard" | "perritos" | "adopciones"| "solicitudesAdopcion"| "usuarios";
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
@@ -19,8 +20,9 @@ export default function AdminPanel() {
       case "solicitudesAdopcion":
         return <SolicitudesAdopcion />;
       case "adopciones":
-        return <Adopciones />;
-      
+        return <Adopciones />;  
+       case "usuarios":
+        return <User />;      
       default:
         return null;
     }
@@ -64,13 +66,14 @@ export default function AdminPanel() {
           <button
             onClick={() => setActiveTab("solicitudesAdopcion")}
             className={`w-full text-left px-4 py-2 rounded ${
-              activeTab === "adopciones"
+              activeTab === "solicitudesAdopcion"
                 ? "bg-white text-red-800 font-semibold"
                 : "hover:bg-red-700"
             }`}
           >
             📋 Solicitudes de Adopción
           </button>
+
           <button
             onClick={() => setActiveTab("adopciones")}
             className={`w-full text-left px-4 py-2 rounded ${
@@ -80,6 +83,17 @@ export default function AdminPanel() {
             }`}
           >
             📋 Historial
+          </button>
+
+            <button
+            onClick={() => setActiveTab("usuarios")}
+            className={`w-full text-left px-4 py-2 rounded ${
+              activeTab === "usuarios"
+                ? "bg-white text-red-800 font-semibold"
+                : "hover:bg-red-700"
+            }`}
+          >
+            👨‍🦱 Usuarios
           </button>
         </nav>
       </aside>
