@@ -25,7 +25,7 @@ export default function AdopcionesAdmin() {
 
   const fetchAdopciones = async () => {
     try {
-      const result = await makeGetRequest("/formulario");
+      const result = await makeGetRequest("/formulario/obtenerHistorial");
       setData(result);
     } catch (err) {
       console.error("Error al cargar adopciones:", err);
@@ -111,7 +111,7 @@ export default function AdopcionesAdmin() {
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <h1 className="text-xl font-bold text-gray-800 mb-4">
-        Gestión de Adopciones
+         Historial de Adopciones
       </h1>
 
       {/* Filtros */}
@@ -128,8 +128,7 @@ export default function AdopcionesAdmin() {
           onChange={(e) => setFiltroEstado(e.target.value)}
           className="border border-gray-300 rounded px-3 py-2 w-full max-w-sm"
         >
-          <option value="">Todos los estados</option>
-          <option value="PENDIENTE">Pendiente</option>
+          <option value="">Todos los estados</option>         
           <option value="APROBADO">Aprobado</option>
           <option value="RECHAZADO">Rechazado</option>
         </select>

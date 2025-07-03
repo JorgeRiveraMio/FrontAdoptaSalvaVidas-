@@ -110,7 +110,7 @@ const filteredData = Array.isArray(data)
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <h1 className="text-xl font-bold text-gray-800 mb-4">
-        Gestión de Adopciones
+        Solicitudes de Adopción Pendientes
       </h1>
 
       {/* Filtros */}

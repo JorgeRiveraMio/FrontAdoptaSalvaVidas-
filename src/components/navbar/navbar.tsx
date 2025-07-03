@@ -5,6 +5,8 @@ import { routes } from "@/config/routes";
 import { useUser } from "@/context/UserContext";
 import { logout } from "@/services/authService";
 import LogoHeader from "@/assets/image/home/Logo_header.png";
+import NotificationDropdown from "@/components/notifications/notificationDropdown";
+
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -104,6 +106,8 @@ export default function Header() {
                   Admin
                 </Link>
               )}
+              {/* 🔔 Notificaciones */}
+             <NotificationDropdown usuarioId={user.id} />
 
               {/* Dropdown */}
               <div className="relative" ref={dropdownRef}>
