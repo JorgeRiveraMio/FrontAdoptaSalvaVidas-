@@ -26,7 +26,7 @@ useEffect(() => {
   const ok = await marcarNotificacionComoLeida(id);
   if (ok) {
     setNotificaciones(prev =>
-      prev.map(n => (n.id === id ? { ...n, leida: 1 } : n)) // ✅ aquí
+      prev.map(n => (n.id === id ? { ...n, leido: true } : n)) // ✅ aquí
     );
   }
 };

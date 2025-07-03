@@ -4,7 +4,7 @@ import { FaEye, FaSpinner, FaPencilAlt } from "react-icons/fa";
 import { Button } from "@heroui/react";
 import TableGeneralCustom from "@/components/shared/TableGeneralCustom";
 import { makeGetRequest, makePutRequest } from "@/services/api";
-import ModalAdopcionDetalle from "@/components/adopciones/modal/ModalAdopcionDetalle";
+import ModalUserDetalle from "@/components/user/modal/ModalUserDetalle";
 import { Usuario } from "@/interfaces/user.interface";
 import { Dialog, Transition } from "@headlessui/react";
 
@@ -99,6 +99,7 @@ const [solicitudesMap, setSolicitudesMap] = useState<Record<number, number>>({})
         return item.rol?.name ?? "—";
       case "solicitudes":
         return solicitudesMap[item.id] ?? "—";
+    
       case "actions":
         return (
           <div className="flex gap-2">
@@ -112,8 +113,19 @@ const [solicitudesMap, setSolicitudesMap] = useState<Record<number, number>>({})
             >
               <FaEye className="text-sm" />
             </Button>
+
+            <Button
+              as="a"
+              href={`mailto:${item.email}`}
+              className="p-1 text-green-600 min-w-0 h-7 w-7 flex items-center justify-center"
+              title="Enviar correo"
+            >
+              📧
+            </Button>
           </div>
         );
+
+
       default:
         return "—";
     }
@@ -149,23 +161,17 @@ const [solicitudesMap, setSolicitudesMap] = useState<Record<number, number>>({})
       </div>
 
       {/* Modal de detalles si quieres mostrar info extra */}
+     
       {isOpen && selectedItem && (
-        <div className="mt-6 p-4 bg-white border rounded shadow">
-          <h2 className="text-lg font-semibold text-gray-700">Detalles del Usuario</h2>
-          <p><b>ID:</b> {selectedItem.id}</p>
-          <p><b>Nombre:</b> {selectedItem.name}</p>
-          <p><b>Email:</b> {selectedItem.email}</p>
-          <p><b>Username:</b> {selectedItem.username}</p>
-          <p><b>Rol:</b> {selectedItem.rol?.name}</p>
+  <ModalUserDetalle
+    isOpen={true}
+    onClose={() => setIsOpen(false)}
+    usuario={selectedItem}
+     cantidadSolicitudes={solicitudesMap[selectedItem.id] ?? 0}
+  />
 
-          <button
-            onClick={() => setIsOpen(false)}
-            className="mt-4 text-blue-600 hover:underline"
-          >
-            Cerrar
-          </button>
-        </div>
-      )}
+)}
+
     </div>
   );
 }
