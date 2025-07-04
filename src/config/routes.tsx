@@ -9,6 +9,10 @@ import AdminPanel from "@/pages/admin";
 import Voluntariado from "@/pages/voluntariado/Voluntariado";
 import Privacity from "@/components/support/Privacity";
 import NotFound from "@/pages/notfound/notfound";
+import Success from "@/pages/payment/Success";
+import Failure from "@/pages/payment/Failure";
+import Pending from "@/pages/payment/Pending";
+
 
 export interface AppRoute {
   name?: string;
@@ -27,5 +31,9 @@ export const routes: AppRoute[] = [
   { name: "Iniciar Sesión", path: "/iniciar-sesion", component: Loggin },
   { name: "Registrarse",   path: "/registrarse",    component: Register },
   { name: "Admin",       path: "/admin",        component: AdminPanel },
-  { name: "Not Found",   path: "*",             component: NotFound }
+  { name: "Not Found",   path: "*",             component: NotFound },
+  { name: "Pago exitoso",  path: "/success",     component: Success },
+  { name: "Pago fallido",  path: "/failure",     component: Failure },
+  { name: "Pago pendiente",path: "/pending",     component: Pending },
+
 ];
