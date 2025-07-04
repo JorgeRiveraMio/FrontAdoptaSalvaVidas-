@@ -1,6 +1,6 @@
 // src/pages/admin/subpages/adopciones.tsx
 import { useEffect, useState, Fragment } from "react";
-import { FaEye, FaSpinner, FaPencilAlt } from "react-icons/fa";
+import { FaEye, FaSpinner, FaPencilAlt,FaChevronLeft ,FaChevronRight} from "react-icons/fa";
 import { Button } from "@heroui/react";
 import TableGeneralCustom from "@/components/shared/TableGeneralCustom";
 import { makeGetRequest, makePutRequest } from "@/services/api";
@@ -164,27 +164,31 @@ export default function AdopcionesAdmin() {
           />
         </div>
       </div>
-      <div className="flex justify-between items-center mt-4">
-        <div className="text-sm text-gray-600">
-          Página {paginaActual} de {totalPaginas}
-        </div>
-        <div className="flex gap-2">
-          <Button
-            disabled={paginaActual === 1}
-            onClick={() => setPaginaActual((prev) => prev - 1)}
-            className="px-3 py-1 text-sm"
-          >
-            Anterior
-          </Button>
-          <Button
-            disabled={paginaActual === totalPaginas}
-            onClick={() => setPaginaActual((prev) => prev + 1)}
-            className="px-3 py-1 text-sm"
-          >
-            Siguiente
-          </Button>
-        </div>
-      </div>
+
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600">
+              <span>
+                Mostrando {paginatedData.length} de {filteredData.length} resultados
+              </span>
+              <div className="flex items-center gap-2">
+                <Button
+                   onClick={() => setPaginaActual((prev) => prev - 1)}
+                    disabled={paginaActual === 1}
+                  className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
+                >
+                  <FaChevronLeft />
+                </Button>
+                <span>
+                  Página {paginaActual} de {totalPaginas}
+                </span>
+                <Button
+                   onClick={() => setPaginaActual((prev) => prev + 1)}
+                  disabled={paginaActual === totalPaginas || filteredData.length === 0}
+                  className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
+                >
+                  <FaChevronRight />
+                </Button>
+              </div>
+            </div>
     </>
   )}
 </div>

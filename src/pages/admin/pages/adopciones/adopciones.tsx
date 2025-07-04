@@ -1,6 +1,11 @@
-//src/pages/admin/subpages/adopciones.tsx
 import { useEffect, useState, Fragment } from "react";
-import { FaEye, FaSpinner, FaPencilAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+  FaEye,
+  FaSpinner,
+  FaPencilAlt,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import { Button } from "@heroui/react";
 import TableGeneralCustom from "@/components/shared/TableGeneralCustom";
 import { makeGetRequest, makePutRequest } from "@/services/api";
@@ -156,54 +161,58 @@ export default function AdopcionesAdmin() {
           <option value="RECHAZADO">Rechazado</option>
         </select>
       </div>
-{}
 
-        <div className="bg-white rounded shadow-md p-4">
+      <div className="bg-white rounded shadow-md p-4">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <FaSpinner className="animate-spin text-3xl text-gray-500" />
             <span className="mt-2 text-gray-500">Cargando adopciones...</span>
           </div>
         ) : (
-          <div className="max-w-[1200px] w-full overflow-x-auto">
-            <div className="scale-[0.90] origin-top-left">
-              <TableGeneralCustom
-                master={{ data: currentData, columns }}
-                renderCellPadre={renderCell}
-              />
+          <>
+            <div className="max-w-[1200px] w-full overflow-x-auto">
+              <div className="scale-[0.90] origin-top-left">
+                <TableGeneralCustom
+                  master={{ data: currentData, columns }}
+                  renderCellPadre={renderCell}
+                />
+              </div>
             </div>
-          </div>
+
+            {/* PAGINACIÓN AHORA DENTRO DEL CONTENEDOR */}
+            {/* <div className="mt-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 w-full max-w-5xl"> */}
+            
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600">
+              <span>
+                Mostrando {currentData.length} de {filteredData.length} resultados
+              </span>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={() => currentPage > 1 && setCurrentPage((p) => p - 1)}
+                  disabled={currentPage === 1}
+                  className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
+                >
+                  <FaChevronLeft />
+                </Button>
+                <span>
+                  Página {currentPage} de {totalPages}
+                </span>
+                <Button
+                  onClick={() =>
+                    currentPage < totalPages && setCurrentPage((p) => p + 1)
+                  }
+                  disabled={currentPage === totalPages || filteredData.length === 0}
+                  className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
+                >
+                  <FaChevronRight />
+                </Button>
+              </div>
+            </div>
+          </>
         )}
       </div>
-      {!isLoading && (
-        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 w-full max-w-5xl">
-          <span>
-            Mostrando {currentData.length} de {filteredData.length} resultados
-          </span>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={() => currentPage > 1 && setCurrentPage((p) => p - 1)}
-              disabled={currentPage === 1}
-              className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
-            >
-              <FaChevronLeft />
-            </Button>
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-            <Button
-              onClick={() =>
-                currentPage < totalPages && setCurrentPage((p) => p + 1)
-              }
-              disabled={currentPage === totalPages || filteredData.length === 0}
-              className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
-            >
-              <FaChevronRight />
-            </Button>
-          </div>
-        </div>
-      )}
 
+      {/* Modal de Detalle */}
       {isOpen && selectedItem && (
         <ModalAdopcionDetalle
           isOpen={isOpen}
@@ -212,6 +221,7 @@ export default function AdopcionesAdmin() {
         />
       )}
 
+      {/* Modal de Gestión */}
       <Transition show={modalGestionOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={() => setModalGestionOpen(false)}>
           <Transition.Child
