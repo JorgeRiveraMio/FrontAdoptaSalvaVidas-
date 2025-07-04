@@ -1,10 +1,8 @@
 import { User } from "@/context";
-import Perrito from "@/interfaces/Perrito";
+
 import {
-  makeGetRequest,
-  makePostRequest,
-  makeDeleteRequest,
-  makePutRequest
+  makeGetRequest
+
 } from "@/services/api";
 export enum TipoDonacion {
   DINERO = "DINERO"

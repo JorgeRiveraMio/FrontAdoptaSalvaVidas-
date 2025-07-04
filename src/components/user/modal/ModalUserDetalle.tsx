@@ -19,18 +19,6 @@ export default function ModalUserDetalle({ isOpen, onClose, usuario, cantidadSol
 
   const showOrDash = (val?: string) => val?.trim() || "-";
 
-  const formatDate = (date?: string) =>
-    date
-      ? new Date(date).toLocaleString("es-PE", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        })
-      : "-";
 
   return (
     <Transition appear show={isOpen} as={Fragment}>

@@ -1,7 +1,6 @@
 import {
   makeGetRequest,
-  makePostRequest,
-  makeDeleteRequest,
+
   makePutRequest
 } from "@/services/api";
 

@@ -2,17 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {
-  FaEye,
-  FaPencilAlt,
-  FaRegTrashAlt,
-  FaPlusCircle,
+
   FaChevronLeft,
   FaChevronRight,
   FaSpinner,
 } from "react-icons/fa";
 import { Button, Input } from "@heroui/react";
 import TableGeneralCustom from "@/components/shared/TableGeneralCustom";
-import ResultModal from "@/components/shared/resultModal";
+
 import {
   fetchDonaciones,
   Donacion
@@ -57,14 +54,7 @@ export default function Donaciones() {
     }
   };
 
-  const searchFields = ["descripcion", "mensaje", "nombreDonante"];
-  // const filtered = data.filter((item) => {
-  //   if (!debouncedSearch) return true;
-  //   const text = debouncedSearch.toLowerCase();
-  //   return searchFields.some((field) =>
-  //     String(item[field as keyof Donacion])?.toLowerCase().includes(text)
-  //   );
-  // });
+
   const filtered = data.filter((item) => {
   if (!debouncedSearch) return true;
 
