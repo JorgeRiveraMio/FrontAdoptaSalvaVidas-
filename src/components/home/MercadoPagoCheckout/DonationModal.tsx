@@ -145,7 +145,7 @@ export default function DonationModal({ isOpen, onClose }: { isOpen: boolean; on
                         disabled={loading}
                         className="px-6 py-2 bg-yellow-400 text-black font-semibold rounded hover:bg-yellow-500 disabled:opacity-50"
                     >
-                        {loading ? "Procesando..." : "Donar"}
+                        {loading ? "Procesando...." : "Donar"}
                     </button>
                 </div>
             </div>
