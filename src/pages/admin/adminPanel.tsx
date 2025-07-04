@@ -5,8 +5,9 @@ import Adopciones from "./pages/adopciones";
 import User from "./pages/user";
 import Dashboard from "./pages/dasboard";
 import SolicitudesAdopcion from "./pages/solicitudesAdopcion";
+import Donaciones from "./pages/donaciones/donaciones";
 
-type Tab = "dashboard" | "perritos" | "adopciones"| "solicitudesAdopcion"| "usuarios";
+type Tab = "dashboard" | "perritos" | "adopciones"| "solicitudesAdopcion"| "usuarios" | "donaciones";
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
@@ -21,8 +22,10 @@ export default function AdminPanel() {
         return <SolicitudesAdopcion />;
       case "adopciones":
         return <Adopciones />;  
-       case "usuarios":
-        return <User />;      
+      case "usuarios":
+        return <User />;  
+      case "donaciones":
+         return <Donaciones />;      
       default:
         return null;
     }
@@ -94,6 +97,16 @@ export default function AdminPanel() {
             }`}
           >
             👨‍🦱 Usuarios
+          </button>
+           <button
+            onClick={() => setActiveTab("donaciones")}
+            className={`w-full text-left px-4 py-2 rounded ${
+              activeTab === "donaciones"
+                ? "bg-white text-red-800 font-semibold"
+                : "hover:bg-red-700"
+            }`}
+          >
+            💰 Donaciones
           </button>
         </nav>
       </aside>

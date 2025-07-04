@@ -1,4 +1,4 @@
-//src/pages/admin/subpages/adopciones.tsx
+// src/pages/admin/subpages/adopciones.tsx
 import { useEffect, useState, Fragment } from "react";
 import { FaEye, FaSpinner, FaPencilAlt } from "react-icons/fa";
 import { Button } from "@heroui/react";
@@ -18,6 +18,9 @@ export default function AdopcionesAdmin() {
 
   const [filtroGeneral, setFiltroGeneral] = useState("");
 
+  // Nueva lógica para paginación
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [itemsPorPagina, setItemsPorPagina] = useState(10);
 
   useEffect(() => {
     fetchAdopciones();
@@ -45,16 +48,20 @@ export default function AdopcionesAdmin() {
     }
   };
 
+  const filteredData = Array.isArray(data)
+    ? data.filter((item) => {
+        const usuario = item.usuario?.name?.toLowerCase() ?? "";
+        const perrito = item.perro?.nombre?.toLowerCase() ?? "";
+        const search = filtroGeneral.toLowerCase();
+        return usuario.includes(search) || perrito.includes(search);
+      })
+    : [];
 
-const filteredData = Array.isArray(data)
-  ? data.filter((item) => {
-      const usuario = item.usuario?.name?.toLowerCase() ?? "";
-      const perrito = item.perro?.nombre?.toLowerCase() ?? "";
-      const search = filtroGeneral.toLowerCase();
-      return usuario.includes(search) || perrito.includes(search);
-    })
-  : [];
-
+  const totalPaginas = Math.ceil(filteredData.length / itemsPorPagina);
+  const paginatedData = filteredData.slice(
+    (paginaActual - 1) * itemsPorPagina,
+    paginaActual * itemsPorPagina
+  );
 
   const columns = [
     { name: "ID", uid: "id", weight: 0.2 },
@@ -114,31 +121,74 @@ const filteredData = Array.isArray(data)
       </h1>
 
       {/* Filtros */}
-      <div className="flex gap-4 mb-4 flex-wrap">
+      <div className="flex flex-wrap gap-4 mb-4 items-center">
         <input
           type="text"
           placeholder="Buscar por usuario o perrito"
           value={filtroGeneral}
-          onChange={(e) => setFiltroGeneral(e.target.value)}
+          onChange={(e) => {
+            setFiltroGeneral(e.target.value);
+            setPaginaActual(1); // Reiniciar a la primera página al filtrar
+          }}
           className="border border-gray-300 rounded px-3 py-2 w-full max-w-sm"
         />
-
+        <select
+          className="border border-gray-300 rounded px-2 py-2"
+          value={itemsPorPagina}
+          onChange={(e) => {
+            setItemsPorPagina(Number(e.target.value));
+            setPaginaActual(1);
+          }}
+        >
+          {[5, 10, 20, 50].map((val) => (
+            <option key={val} value={val}>
+              {val} por página
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div className="bg-white rounded shadow-md p-4">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <FaSpinner className="animate-spin text-3xl text-gray-500" />
-            <span className="mt-2 text-gray-500">Cargando adopciones...</span>
-          </div>
-        ) : (
+     <div className="bg-white rounded shadow-md p-4">
+  {isLoading ? (
+    <div className="flex flex-col items-center justify-center py-20">
+      <FaSpinner className="animate-spin text-3xl text-gray-500" />
+      <span className="mt-2 text-gray-500">Cargando adopciones...</span>
+    </div>
+  ) : (
+    <>
+      <div className="max-w-[1200px] w-full overflow-x-auto">
+        <div className="scale-[0.90] origin-top-left">
           <TableGeneralCustom
-            master={{ data: filteredData, columns }}        
-
+            master={{ data: paginatedData, columns }}
             renderCellPadre={renderCell}
           />
-        )}
+        </div>
       </div>
+      <div className="flex justify-between items-center mt-4">
+        <div className="text-sm text-gray-600">
+          Página {paginaActual} de {totalPaginas}
+        </div>
+        <div className="flex gap-2">
+          <Button
+            disabled={paginaActual === 1}
+            onClick={() => setPaginaActual((prev) => prev - 1)}
+            className="px-3 py-1 text-sm"
+          >
+            Anterior
+          </Button>
+          <Button
+            disabled={paginaActual === totalPaginas}
+            onClick={() => setPaginaActual((prev) => prev + 1)}
+            className="px-3 py-1 text-sm"
+          >
+            Siguiente
+          </Button>
+        </div>
+      </div>
+    </>
+  )}
+</div>
+
 
       {isOpen && selectedItem && (
         <ModalAdopcionDetalle
@@ -148,6 +198,7 @@ const filteredData = Array.isArray(data)
         />
       )}
 
+      {/* Modal de gestión */}
       <Transition show={modalGestionOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={() => setModalGestionOpen(false)}>
           <Transition.Child

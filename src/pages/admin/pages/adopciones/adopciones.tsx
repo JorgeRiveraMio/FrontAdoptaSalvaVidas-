@@ -1,12 +1,21 @@
 //src/pages/admin/subpages/adopciones.tsx
 import { useEffect, useState, Fragment } from "react";
-import { FaEye, FaSpinner, FaPencilAlt } from "react-icons/fa";
+import { FaEye, FaSpinner, FaPencilAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Button } from "@heroui/react";
 import TableGeneralCustom from "@/components/shared/TableGeneralCustom";
 import { makeGetRequest, makePutRequest } from "@/services/api";
 import ModalAdopcionDetalle from "@/components/adopciones/modal/ModalAdopcionDetalle";
 import { Adopcion } from "@/interfaces/adopcion.interface";
 import { Dialog, Transition } from "@headlessui/react";
+
+function useDebounce(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debouncedValue;
+}
 
 export default function AdopcionesAdmin() {
   const [data, setData] = useState<Adopcion[]>([]);
@@ -18,6 +27,9 @@ export default function AdopcionesAdmin() {
 
   const [filtroGeneral, setFiltroGeneral] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+  const debouncedSearch = useDebounce(filtroGeneral, 500);
 
   useEffect(() => {
     fetchAdopciones();
@@ -49,13 +61,18 @@ export default function AdopcionesAdmin() {
     const usuario = item.usuario?.name?.toLowerCase() ?? "";
     const perrito = item.perro?.nombre?.toLowerCase() ?? "";
     const estado = item.estado ?? "";
-    const search = filtroGeneral.toLowerCase();
+    const search = debouncedSearch.toLowerCase();
 
     return (
       (usuario.includes(search) || perrito.includes(search)) &&
       (filtroEstado === "" || estado === filtroEstado)
     );
   });
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentData = filteredData.slice(startIndex, endIndex);
 
   const columns = [
     { name: "ID", uid: "id", weight: 0.2 },
@@ -111,7 +128,7 @@ export default function AdopcionesAdmin() {
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       <h1 className="text-xl font-bold text-gray-800 mb-4">
-         Historial de Adopciones
+        Historial de Adopciones
       </h1>
 
       {/* Filtros */}
@@ -120,33 +137,72 @@ export default function AdopcionesAdmin() {
           type="text"
           placeholder="Buscar por usuario o perrito"
           value={filtroGeneral}
-          onChange={(e) => setFiltroGeneral(e.target.value)}
+          onChange={(e) => {
+            setFiltroGeneral(e.target.value);
+            setCurrentPage(1);
+          }}
           className="border border-gray-300 rounded px-3 py-2 w-full max-w-sm"
         />
         <select
           value={filtroEstado}
-          onChange={(e) => setFiltroEstado(e.target.value)}
+          onChange={(e) => {
+            setFiltroEstado(e.target.value);
+            setCurrentPage(1);
+          }}
           className="border border-gray-300 rounded px-3 py-2 w-full max-w-sm"
         >
-          <option value="">Todos los estados</option>         
+          <option value="">Todos los estados</option>
           <option value="APROBADO">Aprobado</option>
           <option value="RECHAZADO">Rechazado</option>
         </select>
       </div>
+{}
 
-      <div className="bg-white rounded shadow-md p-4">
+        <div className="bg-white rounded shadow-md p-4">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <FaSpinner className="animate-spin text-3xl text-gray-500" />
             <span className="mt-2 text-gray-500">Cargando adopciones...</span>
           </div>
         ) : (
-          <TableGeneralCustom
-            master={{ data: filteredData, columns }}
-            renderCellPadre={renderCell}
-          />
+          <div className="max-w-[1200px] w-full overflow-x-auto">
+            <div className="scale-[0.90] origin-top-left">
+              <TableGeneralCustom
+                master={{ data: currentData, columns }}
+                renderCellPadre={renderCell}
+              />
+            </div>
+          </div>
         )}
       </div>
+      {!isLoading && (
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-600 w-full max-w-5xl">
+          <span>
+            Mostrando {currentData.length} de {filteredData.length} resultados
+          </span>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => currentPage > 1 && setCurrentPage((p) => p - 1)}
+              disabled={currentPage === 1}
+              className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
+            >
+              <FaChevronLeft />
+            </Button>
+            <span>
+              Página {currentPage} de {totalPages}
+            </span>
+            <Button
+              onClick={() =>
+                currentPage < totalPages && setCurrentPage((p) => p + 1)
+              }
+              disabled={currentPage === totalPages || filteredData.length === 0}
+              className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50"
+            >
+              <FaChevronRight />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {isOpen && selectedItem && (
         <ModalAdopcionDetalle
