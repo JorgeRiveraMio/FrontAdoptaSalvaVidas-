@@ -25,7 +25,7 @@ export default function DonationModal({ isOpen, onClose }: { isOpen: boolean; on
 
         setLoading(true);
         try {
-            const res = await fetch("https://backadoptasalvavidas.onrender.com", {
+            const res = await fetch("https://backadoptasalvavidas.onrender.com/api/pagos/donar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
